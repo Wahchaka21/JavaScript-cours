@@ -1,0 +1,16 @@
+{
+  "name": "exo-ed",
+  "version": "1.0.0",
+  "main": "arbo.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "nodemailer": "^7.0.3"
+  }
+}
