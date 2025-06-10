@@ -1,24 +1,20 @@
 //sur postman
 const http = require("http");
 const fs = require("fs");
+const path = require("path")
 
 const server = http.createServer((req, res) => {
   if (req.url === "/users" && req.method === "GET") {
-    const file = fs.readFileSync("users.json", "utf-8");
-    let tableauUsers = JSON.parse(file)
-
-    let html = `<table>
-                  <tr>
-                    <td>Id</td>
-                    <td>Nom</td>
-                  </tr>`
-  tableauUsers.forEach(elem => html += `<tr><td>` + elem.id + `</td><td>` + elem.nom + `</td><td>Modifier</td>` + `<td><button onclicks="supprimerUser(' + elem.id ' )">Supprimer</button></td>` + `</td></tr>` + `</td></tr>`)
-
-  html += `</table>`
-
-  res.setHeader("Content-Type", "text/html; charset=utf-8")
-  res.end(html)
-  } 
+    //pour lire le fichier html
+    const data = fs.readFileSync(path.join(__dirname, "index.html"));
+    res.end(data);
+  }
+  //pour lire le fichier css
+  else if (req.url === "/style.css") {
+    const data = fs.readFileSync(path.join(__dirname, "style.css"));
+    res.setHeader("Content-Type", "text/css");
+    res.end(data);
+  }
   else if (req.url === "/users" && req.method === "POST") {
     let body = "";
 
@@ -61,7 +57,7 @@ const server = http.createServer((req, res) => {
     }
   } else if (req.url.substring(0, 7) === "/users/" && req.method === "DELETE") {
     const tabUrl = req.url.split("/")
-    const idUser = parseInt(tabUrl[2])
+    const idUser = tabUrl[2]
     const file = fs.readFileSync("users.json", "utf-8")
     let tableauUsers = JSON.parse(file)
     const nouveauTab = tableauUsers.filter((u) => u.id !== idUser)

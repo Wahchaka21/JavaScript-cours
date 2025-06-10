@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="img/61687824.png">
+    <title>Serveur Http</title>
+</head>
+<body>
+    <h1>Bienvenue sur le site</h1>
+
+    <h2>Gestion des utilisateurs</h2>
+    <div class="description">
+        <p>
+            Ce script permet de gérer les utilisateurs via une interface web. 
+            Vous pouvez ajouter de nouveaux utilisateurs, modifier leurs informations ou les supprimer. 
+            La liste des utilisateurs est affichée dans un tableau, et les actions sont effectuées via des formulaires.
+            Les données sont récupérées et affichées dynamiquement à partir d'une API, 
+            ce qui permet une interaction fluide sans recharger la page. 
+            Chaque utilisateur est identifié par un ID unique, et les actions de modification 
+            et de suppression sont réalisées via des formulaires dédiés.
+        </p>
+    </div>
+
+    <div class="form-container">
+        <section>
+            <h3>Ajouter un utilisateur</h3>
+            <form action="/add-user" method="POST">
+                <label for="name">Nom:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <button type="submit">Ajouter</button>
+            </form>
+        </section>
+        <section>
+            <h3>Modifier un utilisateur</h3>
+            <form action="/modify-user" method="POST">
+                <label for="id">ID:</label>
+                <input type="number" id="id" name="id" required>
+                <label for="name">Nom:</label>
+                <input type="text" id="name" name="name">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email">
+                <button type="submit">Modifier</button>
+            </form>
+        </section>
+    </div>
+
+    <h3>Liste des utilisateurs</h3>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="user-table">
+            <!-- Les utilisateurs seront insérés ici dynamiquement -->
+        </tbody>
+    </table>
+
+    <script>
+        // Récupération des utilisateurs via l'API
+        fetch('/users')
+            .then(response => response.json())
+            .then(users => {
+                const userTable = document.getElementById('user-table');
+                users.forEach(user => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${user.id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td>
+                            <form action="/delete-user" method="POST" style="display:inline;">
+                                <input type="hidden" name="id" value="${user.id}">
+                                <button type="submit">Supprimer</button>
+                            </form>
+                        </td>
+                    `;
+                    userTable.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Erreur lors de la récupération des utilisateurs:', error));
+    </script>
+</body>
+</html>
