@@ -35,7 +35,6 @@ const server = http.createServer((req, res) => {
     
       // Créer un nouvel id (max +1) sans ternaire ni spread
       let newId;
-    
       if (users.length > 0) {
         // Récupérer tous les ids dans un tableau
         const ids = users.map(function(user) {
@@ -49,18 +48,15 @@ const server = http.createServer((req, res) => {
             maxId = ids[i];
           }
         }
-    
         newId = maxId + 1;
       } else {
         newId = 1;
       }
-    
       const newUser = {
         id: newId,
         name: parsed.name,
         email: parsed.email,
       };
-    
       users.push(newUser);
       fs.writeFileSync("users.json", JSON.stringify(users, null, 2));
     
@@ -69,7 +65,6 @@ const server = http.createServer((req, res) => {
       res.setHeader("Location", "/");
       res.end();
     });
-    
   }
   // Modifier un utilisateur via formulaire POST /modify-user
   else if (req.url === "/modify-user" && req.method === "POST") {
