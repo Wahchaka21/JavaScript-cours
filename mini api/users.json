@@ -1,1 +1,27 @@
-[{"id":1,"nom":"Evan","age":19},{"id":2,"nom":"Nathan","age":20},{"id":3,"nom":"Quentyn","age":20}]
+[
+  {
+    "id": 1,
+    "name": "Evan",
+    "email": "evan.vang@hotmail.com"
+  },
+  {
+    "id": 2,
+    "name": "Nathan",
+    "email": "nathan.mahe@hotmail.com"
+  },
+  {
+    "id": 3,
+    "name": "Edouard",
+    "email": "edouard.hashimoto@hotmail.com"
+  },
+  {
+    "id": 4,
+    "name": "Francis",
+    "email": "francis.gaudiau@hotmail.com"
+  },
+  {
+    "id": 5,
+    "name": "Quentyn",
+    "email": "quentyn.petitjean@hotmail.com"
+  }
+]
