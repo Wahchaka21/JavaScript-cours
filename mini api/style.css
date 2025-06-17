@@ -68,6 +68,8 @@ form button {
 
 form button:hover {
     background-color: #1E1F2B;
+    color: #A2F6FF;
+    border: 1px solid #A2F6FF;
 }
 
 /* Tableau des utilisateurs */
