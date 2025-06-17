@@ -5,7 +5,7 @@ const querystring = require("querystring");
 
 const server = http.createServer((req, res) => {
   // Route pour renvoyer la page HTML
-  if ((req.url === "/" || req.url === "/index.html") && req.method === "GET") {
+  if ((req.url === "/" || req.url === "/server.html") && req.method === "GET") {
     const data = fs.readFileSync(path.join(__dirname, "index.html"));
     res.setHeader("Content-Type", "text/html");
     res.end(data);
