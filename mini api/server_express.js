@@ -11,21 +11,21 @@ app.use(express.json());
 app.get(["/", "/server_express.html"], (req, res) => {
   const data = fs.readFileSync(path.join(__dirname, "server_express.html"));
   res.setHeader("Content-Type", "text/html");
-  res.end(data);
+  res.send(data);
 });
 
 
 app.get("/style.css", (req, res) => {
   const data = fs.readFileSync(path.join(__dirname, "style.css"));
   res.setHeader("Content-Type", "text/css");
-  res.end(data);
+  res.send(data);
 });
 
 
 app.get("/tasks", (req, res) => {
   const file = fs.readFileSync("tasks.json", "utf-8");
   res.setHeader("Content-Type", "application/json");
-  res.end(file);
+  res.send(file);
 });
 
 

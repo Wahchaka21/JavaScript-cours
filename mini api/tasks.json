@@ -1,18 +1,18 @@
 [
   {
     "id": 1,
-    "task": "front"
+    "task": "dépoussiérer"
   },
   {
     "id": 2,
-    "task": "back"
+    "task": "aspirer"
   },
   {
     "id": 3,
-    "task": "user"
+    "task": "laver"
   },
   {
     "id": 4,
-    "task": "gestion"
+    "task": "sècher"
   }
 ]
