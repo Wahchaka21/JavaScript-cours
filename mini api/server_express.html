@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="style.css" />
+  <title>Serveur HTTP express</title>
+</head>
+<body>
+  <h1>Bienvenue sur le site</h1>
+
+  <h2>Gestion des tâches</h2>
+  <section>
+    <h3>Ajouter une tâche</h3>
+    <form action="/add-tasks" method="POST">
+      <label for="task">Nom de la tâche:</label>
+      <input type="text" id="task" name="task" required />
+      <button type="submit">Ajouter</button>
+    </form>
+  </section>
+
+  <h3>Liste des tâches</h3>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Tâche</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="task-table">
+      <!-- Les tâches seront insérées ici dynamiquement -->
+    </tbody>
+  </table>
+
+  <script>
+    fetch('/tasks')
+      .then(response => response.json())
+      .then(tasks => {
+        const taskTable = document.getElementById('task-table');
+        tasks.forEach(task => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${task.id}</td>
+            <td>${task.task}</td>
+            <td>
+              <button onclick="deleteTask(${task.id})">Supprimer</button>
+              <button onclick="modifyTask(${task.id})">Modifier</button>
+            </td>
+          `;
+          taskTable.appendChild(row);
+        });
+      })
+      .catch(error => console.error('Erreur lors de la récupération des tâches:', error));
+
+    function deleteTask(id) {
+      fetch(`/delete-task/${id}`, {
+        method: 'DELETE'
+      })
+        .then(response => {
+          if (response.ok) {
+            location.reload();
+          } else {
+            alert("Tâche non trouvée ou erreur");
+          }
+        });
+    }
+
+    function modifyTask(id) {
+      const newTask = prompt("Nouveau nom de tâche :");
+      if (newTask) {
+        fetch(`/modify-task/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ task: newTask })
+        })
+          .then(response => {
+            if (response.ok) {
+              location.reload();
+            } else {
+              alert("Modification échouée");
+            }
+          });
+      }
+    }
+  </script>
+</body>
+</html>
