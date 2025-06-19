@@ -1,18 +1,10 @@
 [
-  {
-    "id": 1,
-    "task": "dépoussiérer"
-  },
-  {
-    "id": 2,
-    "task": "aspirer"
-  },
-  {
-    "id": 3,
-    "task": "laver"
-  },
-  {
-    "id": 4,
-    "task": "sècher"
-  }
+    {
+        "id":1,
+        "nom":"Tache 1"
+    },
+    {
+        "id":2,
+        "nom":"Tache 2"
+    }
 ]

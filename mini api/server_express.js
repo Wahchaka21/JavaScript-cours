@@ -1,106 +1,65 @@
-const express = require("express")
-const fs = require("fs")
-const path = require("path")
-const app = express()
-const port = 3000
+const express = require('express');
+const fs = require('fs')
+const app = express();
 
-app.use(express.urlencoded({ extended: true }))
+app.use((req, res, next) => {
+    // CORS
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    
+    next();
+});
+
+app.get('/tasks', (req, res) => {
+    res.send(fs.readFileSync('tasks.json', 'UTF-8'))
+});
+
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 
+app.post('/tasks', (req, res) => {
+    console.log(req.body)
+    const task = {"id": req.body.id, "nom": req.body.nom}
+    const file = fs.readFileSync('tasks.json', 'UTF-8')
+    let tableauTasks = JSON.parse(file)
+    tableauTasks.push(task)
+    fs.writeFileSync('tasks.json', JSON.stringify(tableauTasks))
+    res.send('Task créée')
+});
 
-app.get(["/", "/server_express.html"], (req, res) => {
-  const data = fs.readFileSync(path.join(__dirname, "server_express.html"))
-  res.setHeader("Content-Type", "text/html")
-  res.send(data)
-})
+app.put('/tasks/:id', (req, res) => {
+    const idTask = req.params.id
+    const file = fs.readFileSync('tasks.json', 'UTF-8')
+    let tableauTasks = JSON.parse(file)
+    const index = tableauTasks.findIndex(t => t.id == idTask)
+    if (index !== -1) {
+      
+        const nomModifie = req.body.nom
 
+        tableauTasks[index].nom = nomModifie
+        
+        fs.writeFileSync('tasks.json', JSON.stringify(tableauTasks))
 
-app.get("/style.css", (req, res) => {
-  const data = fs.readFileSync(path.join(__dirname, "style.css"))
-  res.setHeader("Content-Type", "text/css")
-  res.send(data)
-})
+        res.send("Tache modifiée")
 
-
-app.get("/tasks", (req, res) => {
-  const file = fs.readFileSync("tasks.json", "utf-8")
-  res.setHeader("Content-Type", "application/json")
-  res.send(file)
-})
-
-
-app.post("/add-tasks", (req, res) => {
-  const parsed = req.body
-  const file = fs.readFileSync("tasks.json", "utf-8")
-  const tasks = JSON.parse(file)
-
-
-  let newId
-  if (tasks.length > 0) {
-    const ids = tasks.map(function (task) {
-      return task.id
-    })
-
-    let maxId = ids[0]
-    for (let i = 1; i < ids.length; i++) {
-      if (ids[i] > maxId) {
-        maxId = ids[i]
-      }
+    } else {
+      res.send('Tache non trouvée')
     }
-    newId = maxId + 1
-  } else {
-    newId = 1
-  }
+});
 
-  const newTask = {
-    id: newId,
-    task: parsed.task
-  }
-  tasks.push(newTask)
-  fs.writeFileSync("tasks.json", JSON.stringify(tasks, null, 2))
+app.delete('/tasks/:id', (req, res) => {
+    const idTask = req.params.id
+    const file = fs.readFileSync('tasks.json', 'UTF-8')
+    let tableauTasks = JSON.parse(file)
+    
+    const nouveauTableau = tableauTasks.filter(t => t.id != idTask)
+    
+    fs.writeFileSync('tasks.json', JSON.stringify(nouveauTableau))
 
-  res.redirect("/")
-})
+    res.send("Tache supprimée")
 
-
-app.put("/modify-task/:id", (req, res) => {
-  const idTask = parseInt(req.params.id)
-  const file = fs.readFileSync("tasks.json", "utf-8")
-  const tasks = JSON.parse(file)
-
-  const index = tasks.findIndex((t) => t.id === idTask)
-  if (index !== -1) {
-    if (req.body.task) tasks[index].task = req.body.task
-    fs.writeFileSync("tasks.json", JSON.stringify(tasks, null, 2))
-    res.send("Tâche modifiée !")
-  } else {
-    res.status(404).send("Tâche non trouvée")
-  }
-})
+});
 
 
-app.delete("/delete-task/:id", (req, res) => {
-  const idTask = parseInt(req.params.id)
-  const file = fs.readFileSync("tasks.json", "utf-8")
-  let tasks = JSON.parse(file)
-
-  const originalLength = tasks.length
-  tasks = tasks.filter((t) => t.id !== idTask)
-
-  if (tasks.length === originalLength) {
-    return res.status(404).send("Tâche non trouvée")
-  }
-
-  fs.writeFileSync("tasks.json", JSON.stringify(tasks, null, 2))
-  res.send("Tâche supprimée !")
-})
-
-
-app.use((req, res) => {
-  res.status(404).send("Not Found")
-})
-
-
-app.listen(port, () => {
-  console.log(`Serveur en ligne sur http://localhost:${port}`)
-})
+app.listen(3000, () => console.log('Serveur à l’écoute sur http://localhost:3000'));
