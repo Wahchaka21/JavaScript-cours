@@ -17,6 +17,8 @@ const taskSchema = new mongoose.Schema({
 
 const Task = mongoose.model("task", taskSchema)
 
+
+//ajouter
 async function createTask() {
     const tache1 = new Task({nom: "Tache 1", duree: 100})
     await tache1.save()
@@ -35,7 +37,7 @@ async function getTasks() {
 // createTask().then(() => getTasks())
 
 
-
+//modifier
 async function updateTask(id) {
     const result = await Task.updateOne({_id: id}, {
         $set: {
@@ -49,7 +51,7 @@ async function updateTask(id) {
 // updateTask("685a992400c6940fbe55dff2")
 
 
-
+//supprimer
 async function deleteTask(id) {
     const result = await Task.deleteOne({_id: id})
     console.log(result)
