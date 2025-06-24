@@ -3,17 +3,16 @@ const fs = require('fs')
 const app = express();
 
 app.use((req, res, next) => {
-    // CORS
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     
-    next();
-});
+    next()
+})
 
 app.get('/tasks', (req, res) => {
     res.send(fs.readFileSync('tasks.json', 'UTF-8'))
-});
+})
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
