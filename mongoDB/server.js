@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/test')
+mongoose.connect('mongodb://localhost:27017/test') //c'est ici qu'on va decider du nom de la base de donnée, ici "test"
     .then(()=> console.log("connecté à mongoDB"))
     .catch(err => console.error("Erreur de connexion à MongoDB", err)
 )
 
-const taskSchema = new mongoose.Schema({
+const taskSchema = new mongoose.Schema({ //on attribue ici ce qu'on va mettre à chaque élément, ici on lui mettra un nom et une durée
     nom: {
         type: String,
         required: true
